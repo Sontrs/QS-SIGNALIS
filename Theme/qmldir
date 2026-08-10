@@ -1,0 +1,5 @@
+module theming
+
+singleton Metrics 1.0 Metrics.qml
+singleton Colors 1.0 Colors.qml
+singleton Fonts 1.0 Fonts.qml
