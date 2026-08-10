@@ -37,7 +37,7 @@ PopupWindow {
     anchor.rect.y: root.anchorTarget ? (root.anchorTarget.height - root.height) / 2 : 0
 
     Timer {
-        interval: 50
+        interval: 100
         running: true
         onTriggered: {
             if (root.anchorTarget) {

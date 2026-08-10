@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import "./Launcher"
 import "./Logout"
 import "./Notifications"
@@ -17,6 +18,24 @@ ShellRoot {
     property bool launcherOpen: false
     property bool logoutOpen: false
 
+    // Maps Hyprland's notion of "focused monitor" (identified by output
+    // name, e.g. "DP-1") onto Quickshell's own ScreenInfo list, since
+    // that's what a window's `screen:` property actually wants.
+    // HyprlandMonitor has no direct back-reference to a Quickshell screen,
+    // so this is a name match. Falls back to the first screen if Hyprland
+    // hasn't reported a focused monitor yet (e.g. queried too early at
+    // startup).
+    function focusedScreen() {
+        const focused = Hyprland.focusedMonitor;
+        if (!focused)
+            return Quickshell.screens[0];
+        for (let i = 0; i < Quickshell.screens.length; i++) {
+            if (Quickshell.screens[i].name === focused.name)
+                return Quickshell.screens[i];
+        }
+        return Quickshell.screens[0];
+    }
+
     // === IPC targets ===
     // Bind these from hyprland.lua with e.g.:
     //   hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("qs ipc call launcher toggle"))
@@ -27,6 +46,9 @@ ShellRoot {
         target: "launcher"
 
         function toggle(): void {
+            if (!root.launcherOpen)
+                anchorWindow.screen = root.focusedScreen();
+
             root.launcherOpen = !root.launcherOpen;
         }
     }
@@ -45,13 +67,22 @@ ShellRoot {
     // it, a fullscreen PanelWindow's whole surface is input-catching by
     // default regardless of visual transparency, which is what was eating
     // every click on the desktop the whole time the shell was running.
+    //
+    // screen defaults to the primary screen at startup and gets
+    // reassigned to whichever monitor was focused at the moment the
+    // launcher IPC toggle actually opens it (see the IpcHandler above) —
+    // not a live binding to the focused monitor, since that would make an
+    // already-open launcher jump screens if focus moved elsewhere while
+    // it's still visible, which isn't what was asked for.
     PanelWindow {
         id: anchorWindow
+        screen: Quickshell.screens[0]
         implicitWidth: Screen.width
         implicitHeight: Screen.height
         visible: true
         color: "transparent"
         mask: Region {}
+
 
         exclusionMode: ExclusionMode.Ignore
 
