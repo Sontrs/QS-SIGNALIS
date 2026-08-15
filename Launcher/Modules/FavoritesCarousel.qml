@@ -108,7 +108,7 @@ Item {
                 onActivated: {
                     if (!delegateItem.isEmpty) {
                         Quickshell.execDetached(appCommand);
-                        closeRequested();
+                        closeLauncher();
                     }
                 }
             }

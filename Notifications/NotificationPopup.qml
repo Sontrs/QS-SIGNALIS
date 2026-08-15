@@ -52,49 +52,60 @@ PanelWindow {
         right: Metrics.sizeXLarge
     }
 
-    Frames.CutFrame {
+    // === Main content (sampled by the CRT stack below) — needs its own
+    // wrapping Item now that CRTStack always needs a sourceItem to sample,
+    // not just when curvature is on. Same mainContent pattern AppLauncher
+    // and WLogout already use. ===
+    Item {
+        id: mainContent
         anchors.fill: parent
-        strokeColor: Colors.redAccent
-        fillColor: Colors.bgBase
-    }
 
-    Rectangle {
-        id: topBar
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: Metrics.notificationPopupHeaderHeight
-        color: Colors.redAccent
+        Frames.CutFrame {
+            anchors.fill: parent
+            strokeColor: Colors.redAccent
+            fillColor: Colors.bgBase
+        }
 
-        Text {
-            anchors.centerIn: parent
-            text: "STATUS"
-            font.family: Fonts.currentFamily
-            font.bold: true
-            font.pixelSize: Fonts.body
-            color: Colors.bgBase
+        Rectangle {
+            id: topBar
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: Metrics.notificationPopupHeaderHeight
+            color: Colors.redAccent
+
+            Text {
+                anchors.centerIn: parent
+                text: "STATUS"
+                font.family: Fonts.currentFamily
+                font.bold: true
+                font.pixelSize: Fonts.body
+                color: Colors.bgBase
+            }
+        }
+
+        Modules.NotificationList {
+            id: notificationList
+            anchors.top: topBar.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: Metrics.sizeMedium
+            height: root.listHeight
         }
     }
 
-    Modules.NotificationList {
-        id: notificationList
-        anchors.top: topBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: Metrics.sizeMedium
-        height: root.listHeight
-    }
-
-    // === CRT material, texture only — no curvature (warping a small
-    // corner rectangle reads as a lens bulge, not "an old screen") and no
-    // flicker (a random white flash on something meant to be skimmed fast
-    // reads as a bug, or worse, gets mistaken for a new notification
-    // arriving). Scanlines/grain alone still tie it visually to
-    // Launcher/Logout without touching either of those problems. ===
+    // === CRT material, texture only — curvature off (warping a small
+    // corner rectangle reads as a lens bulge, not "an old screen").
+    // Aberration on — was silently disabled before along with curvature,
+    // see Theme/Effects/CRTStack.qml. No flicker (a random white flash on
+    // something meant to be skimmed fast reads as a bug, or worse, gets
+    // mistaken for a new notification arriving). ===
     Effects.CRTStack {
         anchors.fill: parent
+        sourceItem: mainContent
         strength: 0.25
         curvatureEnabled: false
+        aberrationEnabled: true
         flickerEnabled: false
     }
 }

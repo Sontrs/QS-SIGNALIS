@@ -72,7 +72,7 @@ Item {
                     }
                 }
 
-                // === Main content (sampled by CRTOverlay below, not drawn directly) ===
+                // === Main content (sampled by the CRT stack below, not drawn directly) ===
                 Item {
                     id: mainContent
                     anchors.fill: parent
@@ -207,6 +207,7 @@ Item {
                     anchors.fill: parent
                     sourceItem: mainContent
                     strength: 1.0
+                    aberrationEnabled: true
                     flickerEnabled: false
                 }
             }

@@ -25,6 +25,25 @@ PopupWindow {
     // that for free on the next open.
     signal closeRequested
 
+    // Guards against closeLauncher() re-entering itself: setting
+    // focusGrab.active = false below triggers focusGrab's own onCleared,
+    // which calls closeLauncher() again. Without this the fade-out
+    // animation would restart mid-flight (and closeRequested would fire
+    // twice) on every single close.
+    property bool closing: false
+
+    // PopupWindow has no plain `opacity` property — Wayland doesn't have a
+    // universal window-opacity concept the way X11 does, so Quickshell
+    // only exposes it as a Hyprland-specific attached property. Animating
+    // fadeOpacity (an ordinary property, zero ambiguity) and binding the
+    // attached property to follow it sidesteps any question about whether
+    // a NumberAnimation can target an attached property's dotted path
+    // directly. HyprlandWindow.opacity itself accepts "any number or
+    // binding" per Quickshell's docs, so this live binding is exactly the
+    // supported usage. Requires Hyprland >= 0.47.0 — comfortably covered.
+    property real fadeOpacity: 0
+    HyprlandWindow.opacity: root.fadeOpacity
+
     anchor.window: anchorTarget
 
     // Live bindings rather than a one-shot Timer assignment: the old version
@@ -42,10 +61,38 @@ PopupWindow {
         onTriggered: {
             if (root.anchorTarget) {
                 root.visible = true;
+                openAnimation.start();
                 focusGrab.active = true;
                 searchBar.input.forceActiveFocus();
             }
         }
+    }
+
+    NumberAnimation {
+        id: openAnimation
+        target: root
+        property: "fadeOpacity"
+        from: 0
+        to: 1
+        duration: 150
+        easing.type: Easing.OutQuad
+    }
+
+    // No `from` — always fades from whatever opacity root is actually at
+    // when triggered, rather than assuming 1, so it stays correct even if
+    // close is somehow requested before the open fade finished.
+    NumberAnimation {
+        id: closeAnimation
+        target: root
+        property: "fadeOpacity"
+        to: 0
+        duration: 120
+        easing.type: Easing.InQuad
+        // Only actually tear the window down once it's already invisible —
+        // this is the entire point, otherwise the LazyLoader in shell.qml
+        // destroys the window mid-fade and the animation never gets to be
+        // seen.
+        onStopped: root.closeRequested()
     }
 
     HyprlandFocusGrab {
@@ -57,8 +104,11 @@ PopupWindow {
     }
 
     function closeLauncher() {
+        if (root.closing)
+            return;
+        root.closing = true;
         focusGrab.active = false;
-        root.closeRequested();
+        closeAnimation.start();
     }
 
     // === Main content (sampled by the CRT stack below, not drawn directly
@@ -180,17 +230,17 @@ PopupWindow {
         }
     } // mainContent
 
-    // === CRT material, texture only — curvature/aberration off. The
-    // vignette darkening that comes bundled with CRTOverlay was reading as
-    // an odd soft shadow around content rather than a screen curve, same
-    // problem Notifications avoided by never enabling it. Scanlines/grain
-    // alone still tie this to the other two surfaces. Flicker off per
-    // request. ===
+    // === CRT material, texture only — curvature off (vignette/warp read
+    // as an odd soft shadow on a small floating popup, not a screen
+    // curve). Aberration now on independently — it used to be silently
+    // killed by curvatureEnabled: false since both lived in one shader,
+    // see Theme/Effects/CRTStack.qml. Flicker off per request. ===
     Effects.CRTStack {
         anchors.fill: parent
         sourceItem: mainContent
         strength: 0.4
         curvatureEnabled: false
+        aberrationEnabled: true
         flickerEnabled: false
     }
 }
