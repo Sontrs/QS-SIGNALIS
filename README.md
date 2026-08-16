@@ -11,6 +11,6 @@ Had help from some robo "friends" since i kinda hate QML- though it isnt entirel
 - Logout Menu
 
 ### Planned:
-- Bar
+- Bar - Currently working. Not all modules from my waybar config are done however.
 - Lockscreen
 - Small stuff (OSD, QuickSettings, etc)
