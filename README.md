@@ -1,5 +1,5 @@
 # QS-Signalis
-Signalis Inspired shell via QuickShell.
+Signalis Inspired tools via QuickShell.
 
 Still needs some polish, but the basics are up and running. Note that this is intentended for *personal* use. If you find this and want to check it out, you'll have to modify some of the files to get it to your liking- like the favorites or logout buttons.
 
