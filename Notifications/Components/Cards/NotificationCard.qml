@@ -2,11 +2,7 @@ import QtQuick
 import "../../../Components/Frames"
 import "../../../Theme"
 
-// Deliberately minimal — a single frame with a thin urgency-colored top bar
-// and appName/urgency/summary/body text. No image slot, corner crosses, or
-// animation for now; those were making every card look like a small
-// dashboard rather than a glanceable notification. Easy to layer specific
-// details back on top of this once the foundation feels right.
+
 Item {
     id: root
 
@@ -20,7 +16,7 @@ Item {
     implicitHeight: content.height + Metrics.notificationCardTopBarHeight + Metrics.sizeMedium * 2
 
     // A plain Item never auto-applies implicitWidth/implicitHeight to its
-    // actual width/height the way Text or Image do — without this, a
+    // actual width/height the way Text or Image do. Without this, a
     // consumer that only anchors width (not height) ends up with a
     // 0-height, invisible card even though everything inside still runs.
     width: implicitWidth
@@ -32,9 +28,7 @@ Item {
         fillColor: Colors.bgBase
     }
 
-    // Thick top bar — fixed red, matching the outer popup container and the
-    // game's consistent red UI language, rather than varying by urgency.
-    // Urgency is communicated through the label text color alone below.
+    // Thick top bar
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left

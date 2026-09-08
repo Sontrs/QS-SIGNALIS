@@ -15,7 +15,7 @@ ListView {
 
     // Quickshell's trackedNotifications prints UntypedObjectModel based on logs.
     // It doesn't expose a `count` property to QML, but it does expose
-    // `values`, whose length tracks the number of notifications.
+    // `values`, whose length can be used to track the number of notifications.
     readonly property int notificationCount:
         notificationModel.notifications.values.length
 
@@ -28,9 +28,7 @@ ListView {
 
     model: root.notificationModel.notifications
 
-    // One-shot entrance/exit motion (not a continuous/looping effect) —
-    // addresses cards just snapping into and out of existence. Easy to
-    // remove if you'd rather have zero motion for now.
+    // One-shot entrance/exit motion, not a continuous/looping effect.
     add: Transition {
         NumberAnimation { property: "opacity"; from: 0; to: 1; duration: Metrics.animNormal }
         NumberAnimation { property: "x"; from: 40; to: 0; duration: Metrics.animNormal; easing.type: Easing.OutQuad }
@@ -68,9 +66,7 @@ ListView {
         }
 
         Timer {
-            // Critical notifications persist until manually dismissed —
-            // matches how most notification systems avoid silently
-            // clearing your most urgent alerts.
+            // Critical notifications persist until manually dismissed
             running: delegateItem.notification.urgency !== NotificationUrgency.Critical
             interval: delegateItem.notification.expireTimeout > 0
                       ? delegateItem.notification.expireTimeout * 1000

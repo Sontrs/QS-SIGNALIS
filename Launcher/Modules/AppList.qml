@@ -16,8 +16,7 @@ PathView {
     property string filterText: ""
     property int minRepeats: pathItemCount * 2
 
-    // Owns the raw, filtered app data. Presentation-only padding
-    // (below) stays here in the Module, not in the Model.
+    // Owns the raw, filtered app data.
     property var appModel: Models.AppModel {}
 
     model: ListModel {

@@ -1,3 +1,15 @@
+//@ pragma UseQApplication
+
+// Some tray apps' context menus render as a "PlatformMenuEntry" — a real
+// native QWidget-based menu, not a DBusMenu Quickshell can draw itself.
+// Quickshell defaults to QGuiApplication (it's normally pure QtQuick, no
+// widgets needed), and those platform menus fail outright without this —
+// confirmed directly from Quickshell's own runtime error pointing at
+// this exact fix. Has to be a `//@ pragma` comment rather than a normal
+// QML `pragma` statement, and has to be the literal first thing in the
+// root file — this decides which QApplication subclass the process
+// starts as, before the QML engine itself even exists to parse a normal
+// pragma statement.
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -6,6 +18,7 @@ import Quickshell.Hyprland
 import "./Launcher"
 import "./Logout"
 import "./Notifications"
+import "./Bar"
 
 ShellRoot {
     id: root
@@ -18,13 +31,8 @@ ShellRoot {
     property bool launcherOpen: false
     property bool logoutOpen: false
 
-    // Maps Hyprland's notion of "focused monitor" (identified by output
-    // name, e.g. "DP-1") onto Quickshell's own ScreenInfo list, since
-    // that's what a window's `screen:` property actually wants.
-    // HyprlandMonitor has no direct back-reference to a Quickshell screen,
-    // so this is a name match. Falls back to the first screen if Hyprland
-    // hasn't reported a focused monitor yet (e.g. queried too early at
-    // startup).
+    // Falls back to the first screen if Hyprland hasn't reported a focused
+    // monitor yet (e.g. queried too early at startup).
     function focusedScreen() {
         const focused = Hyprland.focusedMonitor;
         if (!focused)
@@ -37,11 +45,7 @@ ShellRoot {
     }
 
     // === IPC targets ===
-    // Bind these from hyprland.lua with e.g.:
-    //   hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("qs ipc call launcher toggle"))
-    //   hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("qs ipc call logout toggle"))
-    // `qs ipc show` lists whatever targets are currently registered, handy
-    // for checking these actually loaded.
+
     IpcHandler {
         target: "launcher"
 
@@ -62,15 +66,12 @@ ShellRoot {
     }
 
     // Exists purely as an anchor reference point for AppLauncher's
-    // PopupWindow — never meant to actually receive input. mask: Region {}
-    // (an empty region) makes the *entire* surface click-through; without
-    // it, a fullscreen PanelWindow's whole surface is input-catching by
-    // default regardless of visual transparency, which is what was eating
-    // every click on the desktop the whole time the shell was running.
-    //
+    // PopupWindow. mask: Region {} (an empty region) makes the
+    // entire surface click-through.
+
     // screen defaults to the primary screen at startup and gets
     // reassigned to whichever monitor was focused at the moment the
-    // launcher IPC toggle actually opens it (see the IpcHandler above) —
+    // launcher IPC toggle actually opens it (see the IpcHandler above)
     // not a live binding to the focused monitor, since that would make an
     // already-open launcher jump screens if focus moved elsewhere while
     // it's still visible, which isn't what was asked for.
@@ -94,11 +95,8 @@ ShellRoot {
         }
     }
 
-    // AppLauncher's root is a PopupWindow (not an Item), so per Quickshell's
-    // own guidance this is a LazyLoader rather than a plain Loader. Fully
-    // unloads on close instead of just hiding — costs ~nothing while idle.
-    // For quick visual testing without Hyprland/IPC at all, temporarily
-    // change the line below to `property bool launcherOpen: true`.
+    // AppLauncher's root is a PopupWindow so per Quickshell's own guidance
+    // this is a LazyLoader rather than a plain Loader.
     LazyLoader {
         active: root.launcherOpen
 
@@ -109,9 +107,6 @@ ShellRoot {
     }
 
     // WLogout's root IS an Item, so this one's a plain Loader instead.
-    // Real shutdown/reboot/logout/lock commands — swapped in from the
-    // previous working version. hyprshutdown is presumably a script you
-    // already have; not something I'm assuming exists.
     Loader {
         active: root.logoutOpen
 
@@ -147,9 +142,15 @@ ShellRoot {
         }
     }
 
-    // Untouched — stays data-driven off the notification server's own
-    // tracked count, no bind/IPC/lazy-loading needed here.
+    // Data-driven off the notification server's own tracked count, no
+    // bind/IPC/lazy-loading needed here.
     NotificationPopup {
         id: notificationPopup
+    }
+
+    // Plain instantiation, not a Loader/LazyLoader.
+    Bar {
+        id: bar
+        onPowerRequested: root.logoutOpen = !root.logoutOpen
     }
 }

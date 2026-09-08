@@ -6,8 +6,6 @@ import "../Components/Frames" as Frames
 import "../Theme"
 import "../Theme/Effects" as Effects
 
-// Outer container matching the game's "TRANSCRIPTION"-style box: one frame,
-// a thick colored top bar carrying the title, dark body underneath.
 PanelWindow {
     id: root
 

@@ -33,8 +33,7 @@ QtObject {
     readonly property int iconLarge: 64
 
     // === Navigation arrows ===
-    // Separate from icon sizes: this is a large decorative glyph
-    // (the launcher's prev/next favorites buttons), not an app icon.
+    // The launcher's prev/next favorites buttons
     readonly property int arrowSize: 100
 
     // === Search bar ===
@@ -58,4 +57,7 @@ QtObject {
     // Each individual card's thick top bar — urgency-colored, no text, so
     // it can stay thin like the launcher/logout accent bars elsewhere.
     readonly property int notificationCardTopBarHeight: 8
+
+    // === Bar ===
+    readonly property int barHeight: 32
 }

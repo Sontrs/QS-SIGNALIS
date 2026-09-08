@@ -9,18 +9,13 @@ import "../Theme/Effects" as Effects
 Item {
     id: root
 
-    // Deliberately not Colors.bgBase (#202020) — the old code used pure
-    // black specifically as a full-screen backdrop for the CRT takeover,
-    // distinct from the launcher panels' dark grey.
+    // Deliberately not Colors.bgBase (#202020)
     property color backgroundColor: "#000000"
     property color buttonColor: Colors.redAccent
     property color buttonHoverColor: Colors.whiteAccent
     default property list<LogoutButton> buttons
 
-    // Emitted instead of hiding directly — the owning Loader (see
-    // shell.qml) tears the whole thing down on close instead of just
-    // setting visible: false, so idle logout screens cost nothing. Same
-    // reasoning as AppLauncher.closeRequested.
+    // Emitted instead of hiding directly.
     signal closeRequested
 
     Variants {
@@ -88,19 +83,15 @@ Item {
                             anchors.bottomMargin: parent.height * 0.05
                             spacing: 10
                             width: parent.width * 0.85
-                            // No explicit height needed: every child below now
-                            // has a real preferred/fixed height (no fillHeight
-                            // anywhere in this tree anymore), so the circular-
-                            // dependency problem that required an explicit
-                            // height here previously no longer applies. This
+                            // No explicit height needed, every child below now
+                            // has a real preferred/fixed height. This
                             // sizes tightly to its actual content instead of
                             // leaving empty space below the buttons.
 
                             // ---------- LABELS ----------
-                            // Static — never animated on its own. It just sits
-                            // behind/underneath the falling button row, so it
-                            // reads as "revealed" once the fall settles rather
-                            // than popping in.
+                            // Static. It just sits behind/underneath the falling
+                            // button row, so it reads as "revealed" once the fall
+                            // settles rather than popping in.
                             GridLayout {
                                 Layout.fillWidth: true
                                 columns: 4

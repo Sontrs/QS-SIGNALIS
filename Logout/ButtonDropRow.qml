@@ -1,11 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 
-// Bespoke entrance animation for the Logout menu's button row, matching
-// SIGNALIS's main menu: each button starts as a thin sliver near the
-// vertical center of the screen and falls/grows into its final position,
-// leaving a trail of static "ghost" bars behind it as it goes. Not intended
-// to be reused elsewhere — kept local to Logout/ rather than generalized.
+// Bespoke entrance animation for the Logout menu's button row.
 Item {
     id: root
 

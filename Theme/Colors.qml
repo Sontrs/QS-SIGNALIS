@@ -11,9 +11,7 @@ QtObject {
   readonly property color textPrimary: "white"
 
   // === Notification urgency accents ===
-  // DANGER intentionally reuses redAccent rather than a separate token —
-  // "most severe" naturally aligns with the red identity already used
-  // everywhere else in the shell.
+
   readonly property color nominalAccent: "#3DDBD9"
   readonly property color cautionAccent: "#F2B33D"
   readonly property color dangerAccent: redAccent

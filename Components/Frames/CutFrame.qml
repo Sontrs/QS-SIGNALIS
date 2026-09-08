@@ -36,10 +36,6 @@ Item {
                                               : root.fillColor
 
     // === Plain rectangle path (no cuts) ===
-    // A real Rectangle instead of a Shape/ShapePath: simpler and more
-    // reliable than a drawn path for the common uncut case (used for panel
-    // backgrounds, the search bar frame, etc.), and sidesteps any
-    // QtQuick.Shapes rendering quirk entirely rather than working around it.
     Rectangle {
         anchors.fill: parent
         visible: !root.hasAnyCut

@@ -2,8 +2,7 @@ import QtQuick
 import "../../Theme"
 
 // Four "+" corner marks, inset by `margin` from whatever bounds the caller
-// gives it (typically via anchors.fill) — not tied to any specific card's
-// dimensions.
+// gives it (typically via anchors.fill)
 Item {
     id: root
 
