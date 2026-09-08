@@ -9,8 +9,10 @@ Had help from some robo "friends" since i kinda hate QML- though it isnt entirel
 - App Launcher
 - Notifications
 - Logout Menu
+- Bar (Waybar like. Has: Workspaces, time/date, backlight %, free disk space, temps, ram, cpu, battery %, audio %, wifi, tray, power button)
 
 ### Planned:
-- Bar - Currently working. Not all modules from my waybar config are done however.
 - Lockscreen
 - Small stuff (OSD, QuickSettings, etc)
+
+It uses around 280 ~ 300 MB of ram sadly. Open to suggestions on how to improve memory usage if possible.
