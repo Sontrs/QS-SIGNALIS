@@ -29,11 +29,7 @@ https://github.com/user-attachments/assets/b051f865-943a-4af1-abaf-61f5d60dc088
 
 ### Notifications
 
-
-https://github.com/user-attachments/assets/cc01022a-18cb-4cc5-b5f1-f9471b3b0fb5
-
-
-https://github.com/user-attachments/assets/e0a4af2d-f9f1-4cbd-ae53-6da3a249ecb4
+Check the Media folder.
 
 ### Logout
 
