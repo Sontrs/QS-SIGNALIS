@@ -19,6 +19,8 @@ Theres also Colors schemes on General/ both .conf and .colors. Not related to th
 
 It uses around 280 ~ 300 MB of ram sadly. Open to suggestions on how to improve memory usage if possible.
 
+Launcher should be called via hl.dsp.exec_cmd("quickshell ipc call launcher toggle"), or an abstraction like hl.dsp.exec_cmd(defaults.applauncher)
+
 ## Modifying
 To modify the favorites carousel thats on the top of the launcher, or what the logout buttons do, check:
 
