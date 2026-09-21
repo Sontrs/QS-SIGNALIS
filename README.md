@@ -21,7 +21,7 @@ It uses around 280 ~ 300 MB of ram sadly. Open to suggestions on how to improve 
 
 Launcher should be called via hl.dsp.exec_cmd("quickshell ipc call launcher toggle"), or an abstraction like hl.dsp.exec_cmd(defaults.applauncher)
 
-Bar was basically replicated by reihera's "i3-signalis" rice. https://github.com/reihera/i3-signalis
+Bar was basically replicated from reihera's "i3-signalis" rice. https://github.com/reihera/i3-signalis
 
 ## Modifying
 To modify the favorites carousel thats on the top of the launcher, or what the logout buttons do, check:
