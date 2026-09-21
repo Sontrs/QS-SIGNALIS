@@ -5,7 +5,11 @@ Still needs some polish, but the basics are up and running. Note that this is in
 
 Had help from some robo "friends" since i kinda hate QML- though it isnt entirely built with them.
 
-Theres also Colors schemes on General/ both .conf and .colors. Not related to the tools, but i think they compliment them well enough. 
+Theres also Colors schemes on General/ both .conf and .colors. Not related to the tools, but i think they compliment them well enough.
+
+Bar was basically replicated from reihera's "i3-signalis" rice. https://github.com/reihera/i3-signalis
+
+Uses the "Visitor TT1 BRK" font.
  
 ### Currently working:
 - App Launcher
@@ -20,8 +24,6 @@ Theres also Colors schemes on General/ both .conf and .colors. Not related to th
 It uses around 280 ~ 300 MB of ram sadly. Open to suggestions on how to improve memory usage if possible.
 
 Launcher should be called via hl.dsp.exec_cmd("quickshell ipc call launcher toggle"), or an abstraction like hl.dsp.exec_cmd(defaults.applauncher)
-
-Bar was basically replicated from reihera's "i3-signalis" rice. https://github.com/reihera/i3-signalis
 
 ## Modifying
 To modify the favorites carousel thats on the top of the launcher, or what the logout buttons do, check:
