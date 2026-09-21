@@ -26,7 +26,7 @@ To modify the favorites carousel thats on the top of the launcher, or what the l
   
 - Favorites: On Launcher/Models/FavoritesModel.qml you can find a list with the 6 favorites. You could add more probably- though i just did six to match the game. Either way, here you can edit the name shown on the top of the square, the icon that the app should show, the command that is used to launch the app, and the number shown on the bottom right of the square.
 
--Bar modules: Handled on each of their corresponding files under Bar/Modules/ respectively. The default values the modules that launch apps on click are the Time/Date module (calcurse), Storage module (baobab), Temperature/Memory/Cpu modules (btop), Volume module (pavucontrol), and the Network module (nm-connection-editor).
+- Bar modules: Handled on each of their corresponding files under Bar/Modules/ respectively. The default values the modules that launch apps on click are the Time/Date module (calcurse), Storage module (baobab), Temperature/Memory/Cpu modules (btop), Volume module (pavucontrol), and the Network module (nm-connection-editor).
 
 ## Media
 
